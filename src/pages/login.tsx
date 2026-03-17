@@ -36,10 +36,10 @@ export default function LoginPage() {
     setLoading(false);
 
     // try {
-    //   const { isSignedIn, nextStep } = await signIn({
-    //     username: data.email,
-    //     password: data.password,
-    //   });
+    // const { isSignedIn, nextStep } = await signIn({
+    //   username: data.email,
+    //   password: data.password,
+    // });
 
     //   // Amplify tells you exactly what to do next based on Cognito's state
     //   switch (nextStep.signInStep) {

@@ -5,7 +5,6 @@ const BaseLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
-  // Inside components/BaseLayout.tsx
   useEffect(() => {
     const checkAuth = async () => {
       try {

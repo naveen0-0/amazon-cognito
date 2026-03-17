@@ -40,7 +40,6 @@ export default async function handler(
     const authResult = response.AuthenticationResult;
 
     if (authResult) {
-      // Set the ID Token in an HTTP-only cookie
       res.setHeader("Set-Cookie", [
         serialize("id_token", authResult.IdToken!, {
           path: "/",
@@ -50,6 +49,8 @@ export default async function handler(
           maxAge: 3600, // 1 hour
         }),
       ]);
+
+      console.log("authResult", authResult);
 
       return res.status(200).json({ success: true });
     }

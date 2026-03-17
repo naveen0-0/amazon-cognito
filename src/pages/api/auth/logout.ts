@@ -14,7 +14,6 @@ export default async function handler(
   const cookies = parse(req.headers.cookie || "");
   const accessToken = cookies.access_token;
 
-  // 1. Tell Amazon Cognito to revoke the session globally
   if (accessToken) {
     try {
       const command = new GlobalSignOutCommand({
@@ -23,11 +22,9 @@ export default async function handler(
       await client.send(command);
     } catch (error) {
       console.error("Cognito Global Signout failed:", error);
-      // We continue anyway to clear local cookies
     }
   }
 
-  // 2. Clear Local Cookies (Local Session)
   const cookieOptions = {
     path: "/",
     httpOnly: true,
