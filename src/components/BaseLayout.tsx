@@ -1,25 +1,37 @@
-import { signIn, useSession } from "next-auth/react";
-import { ReactNode, useEffect } from "react";
-// import Cookies from "js-cookie";
-import useIsWindow from "@/hooks/usIsWindow";
+import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const BaseLayout = ({ children }: { children: ReactNode }) => {
-  const { isWindow } = useIsWindow();
-  const { data, status } = useSession();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log(data);
-
+  // Inside components/BaseLayout.tsx
   useEffect(() => {
-    if (!data && status === "unauthenticated") {
-      signIn("cognito", undefined, { prompt: "login" });
-    }
-  }, [data, status, isWindow]);
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
 
-  const loadingState = status === "loading" || status === "unauthenticated";
+        if (res.ok) {
+          const data = await res.json();
+          console.log("Logged in as:", data.user.email);
+          setIsLoading(false);
+        } else {
+          throw new Error("Unauthorized");
+        }
+      } catch (error) {
+        console.log(error);
+        if (router.pathname !== "/login") {
+          router.push("/login");
+        } else {
+          setIsLoading(false);
+        }
+      }
+    };
 
-  if (loadingState) return "loading...";
+    checkAuth();
+  }, [router.pathname]);
 
-  if (!isWindow) return null;
+  if (isLoading) return "Loading...";
 
   return <div>{children}</div>;
 };

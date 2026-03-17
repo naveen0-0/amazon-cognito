@@ -1,11 +1,28 @@
-import { signOut, useSession } from "next-auth/react";
+// import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const { data } = useSession();
+  const router = useRouter();
+  // const { data } = useSession();
+
+  // const handleLogout = async () => {
+  //   await signOut({ redirect: false });
+  //   window.location.href = "/api/auth/federated-logout";
+  // };
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
-    window.location.href = "/api/auth/federated-logout";
+    try {
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        // Redirect to login after cookies are cleared
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -18,7 +35,7 @@ export default function Home() {
         Log out
       </button>
 
-      <p>{JSON.stringify(data, null, 2)}</p>
+      {/* <p>{JSON.stringify(data, null, 2)}</p> */}
     </div>
   );
 }

@@ -1,17 +1,29 @@
 import BaseLayout from "@/components/BaseLayout";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
+// import { SessionProvider } from "next-auth/react";
+import { Amplify } from "aws-amplify";
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppProps) {
+// Amplify.configure(
+//   {
+//     Auth: {
+//       Cognito: {
+//         userPoolId: "us-east-1_8CIhL070h",
+//         userPoolClientId: "2lucfvfs1pb37ekqb3fsq4run6",
+//         // If your Cognito setup requires a specific region
+//         loginWith: {
+//           email: true,
+//         },
+//       },
+//     },
+//   },
+//   { ssr: true },
+// );
+
+export default function App({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={session}>
-      <BaseLayout>
-        <Component {...pageProps} />
-      </BaseLayout>
-    </SessionProvider>
+    <BaseLayout>
+      <Component {...pageProps} />
+    </BaseLayout>
   );
 }
