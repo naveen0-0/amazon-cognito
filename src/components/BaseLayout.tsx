@@ -1,25 +1,24 @@
 import { signIn, useSession } from "next-auth/react";
 import { ReactNode, useEffect } from "react";
-// import Cookies from "js-cookie";
-import useIsWindow from "@/hooks/usIsWindow";
+import { useRouter } from "next/router";
 
 const BaseLayout = ({ children }: { children: ReactNode }) => {
-  const { isWindow } = useIsWindow();
   const { data, status } = useSession();
-
-  console.log(data);
+  const router = useRouter();
 
   useEffect(() => {
-    if (!data && status === "unauthenticated") {
-      signIn("cognito", undefined, { prompt: "login" });
+    const isAuthPage = router.pathname.startsWith("/auth");
+
+    if (!data && status === "unauthenticated" && !isAuthPage) {
+      signIn();
     }
-  }, [data, status, isWindow]);
+  }, [data, status, router.pathname]);
 
-  const loadingState = status === "loading" || status === "unauthenticated";
+  const isAuthPage = router.pathname.startsWith("/auth");
+  const loadingState =
+    status === "loading" || (status === "unauthenticated" && !isAuthPage);
 
-  if (loadingState) return "loading...";
-
-  if (!isWindow) return null;
+  if (loadingState) return <p>Loading...</p>;
 
   return <div>{children}</div>;
 };
