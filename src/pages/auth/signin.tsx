@@ -25,6 +25,10 @@ export default function SignIn() {
     }
   };
 
+  const handleForgotPass = () => {
+    console.log("Password Forgot");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100">
       <form
@@ -45,10 +49,12 @@ export default function SignIn() {
           className="w-full p-2 mb-6 border border-slate-300 rounded focus:ring-2 focus:ring-blue-400 outline-none"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded transition">
+        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded transition cursor-pointer">
           Login
         </button>
       </form>
+
+      <button onClick={handleForgotPass}>Forgot Password?</button>
     </div>
   );
 }
